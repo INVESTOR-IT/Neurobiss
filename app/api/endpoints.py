@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request
 
 from app.servise.servise import parse_amocrm_webhook_data
+from app.ai.ai import text_processing_using_openai
 
 
 router = APIRouter()
@@ -15,3 +16,5 @@ async def health():
 async def amocrm_webhook(request: Request):
     form_data = await request.form()
     result = await parse_amocrm_webhook_data(form_data)
+    print(result)
+    result_openai = await text_processing_using_openai(result)

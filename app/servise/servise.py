@@ -1,13 +1,28 @@
 import re
 
 
-async def parse_amocrm_webhook_data(form_data: dict) -> dict:
+async def parse_amocrm_webhook_data(form_data: dict) -> str:
     '''
     Функция обрабатывает полученные данные с вебхука амосрм.
     '''
-    result_data = {}
+
+    statuses = {'add': 'Пользователь добавил информацию: ',
+                'update': 'Пользователь обновил информцию: ',
+                'delete': 'Пользователь удалил задачу: '}
+    actions = {'0': 'Какое-то действие ', '1': 'Связаться ', '2': 'Встреча '}
+    task_type = '0'
 
     for key, value in form_data.items():
-        key = ' '.join(re.sub(r'\[|\]', r' ', key).split())
-        result_data[key] = value
-    return result_data
+        if 'task_type' in key:
+            task_type = value
+        if 'task' in key:
+            if 'delete' in key:
+                result = statuses['delete'] + value
+            if 'text' in key:
+                for status in statuses:
+                    if status in key:
+                        result = (statuses.get(status, '')
+                                  + actions.get(task_type, 'Какое-то действие ')
+                                  + value)
+
+    return result
