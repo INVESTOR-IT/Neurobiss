@@ -43,7 +43,9 @@ async def text_processing_using_openai(text: str) -> str:
             temperature=0.6,
             n=1,
         )
-        return response.choices[0].message.content
+        result = response.choices[0].message.content
+        logger.info(f'Обработаны данные {result}')
+        return result
     except openai.APIConnectionError as e:
         logger.error('Ошибка соединения с API OpenAI: {e}')
     except openai.RateLimitError as e:

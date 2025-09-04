@@ -3,12 +3,14 @@ from loguru import logger
 
 from app.api import endpoints
 
-
 app = FastAPI()
 
 
 @app.middleware('http')
 async def middleware(request: Request, call_next):
+    '''
+    Middleware для логирования
+    '''
     logger.info(request)
     response = await call_next(request)
     return response

@@ -1,4 +1,4 @@
-import re
+from loguru import logger
 
 
 async def parse_amocrm_webhook_data(form_data: dict) -> str:
@@ -24,5 +24,6 @@ async def parse_amocrm_webhook_data(form_data: dict) -> str:
                         result = (statuses.get(status, '')
                                   + actions.get(task_type, 'Какое-то действие ')
                                   + value)
-
+                break
+    logger.info(f'Обработаны данные: {result}')
     return result
